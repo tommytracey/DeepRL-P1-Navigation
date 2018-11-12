@@ -2,7 +2,7 @@ import numpy as np
 import random
 from collections import namedtuple, deque
 
-from model_v1 import QNetwork
+from model import QNetwork
 
 import torch
 import torch.nn.functional as F
@@ -12,10 +12,6 @@ BUFFER_SIZE = int(1e5)  # replay buffer size
 BATCH_SIZE = 64         # minibatch size
 GAMMA = 0.99            # discount factor
 LR = 5e-4               # learning rate
-# PER_E=0.01              # prioritized experience replay epsilon
-# PER_A=0.6               # prioritized experience replay alpha
-# PER_B=0.5               # prioritized experience replay beta
-# PER_B_inc=0.001         # prioritized experience replay beta increment
 TAU = 1e-3              # for soft update of target parameters
 UPDATE_EVERY = 4        # how often to update the network
 
@@ -25,7 +21,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, seed, use_dueling=False, use_double=False, use_PER=False):
+    def __init__(self, state_size, action_size, seed, use_dueling=False, use_double=False):
         """Initialize an Agent object.
 
         Params
@@ -35,15 +31,12 @@ class Agent():
             seed (int): random seed
             use_dueling (bool): if 'True' use dueling agent
             use_double (bool): if 'True' use double DDQN agent
-            use_PER (bool): if 'True' use prioritized experience replay
-
         """
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(seed)
         self.use_dueling = use_dueling
         self.use_double = use_double
-        self.use_PER = use_PER
 
         # Q-Network
         self.qnetwork_local = QNetwork(state_size, action_size, seed,
