@@ -5,8 +5,9 @@
 
 ##### &nbsp;
 
-<img src="assets/banana_agent.gif" width="100%" align="top-left" alt="" title="Banana Agent" />
-_Above: animation of my final trained agent_
+<img src="assets/banana_agent.gif" width="60%" align="top-left" alt="" title="Banana Agent" />
+
+*Above: My trained agent in action!*
 
 ##### &nbsp;
 
@@ -84,7 +85,7 @@ We can then define our optimal policy `π*` as the action that maximizes the Q-f
 
 In order to discount returns at future time steps, the Q-function can be expanded to include the hyperparameter gamma `γ`.
 
-<img src="assets/optimal-action-value-function.png" width="67%" align="top-left" alt="" title="Optimal Policy Equation" />
+<img src="assets/optimal-action-value-function.png" width="67%" align="top-left" alt="" title="Optimal Action Value Function" />
 
 
 #### Epsilon Greedy Algorithm
@@ -116,8 +117,15 @@ The implementation of the replay buffer can be found [here](https://github.com/t
 
 
 #### Double Deep Q-Network (DDQN)
+One issue with Deep Q-Networks is they can overestimate Q-values (see [Thrun & Schwartz, 1993](https://www.ri.cmu.edu/pub_files/pub1/thrun_sebastian_1993_1/thrun_sebastian_1993_1.pdf)). The accuracy of the Q-values depends on which actions have been tried and which states have been explored. If the agent hasn't gathered enough experiences, the Q-function will end up selecting the maximum value from a noisy set of reward estimates. This can cause the algorithm to propagate incidentally high rewards that may have been obtained by chance.
 
+<img src="assets/overestimating-Q-values.png" width="67%" align="top-left" alt="" title="Overestimating Q-values" />
 
+We can address this issue using Double Q-Learning, where one set of parameters `w` is used to select the best action, and another set of parameters `w'` is used to evaluate that action.  
+
+<img src="assets/DDQN-slide.png" width="50%" align="top-left" alt="" title="Overestimating Q-values" />
+
+The DDQN implementation can be found [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/agent.py#L96) in the `agent.py` file of the source code.
 
 
 #### Dueling Agents
