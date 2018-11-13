@@ -5,7 +5,7 @@
 
 ##### &nbsp;
 
-<img src="images/banana_agent.gif" width="100%" align="top-left" alt="" title="Banana Agent" />
+<img src="assets/banana_agent.gif" width="100%" align="top-left" alt="" title="Banana Agent" />
 _Above: animation of my final trained agent_
 
 ##### &nbsp;
@@ -76,15 +76,15 @@ In the following sections, we'll describe each component of the algorithm in det
 #### Q-Function
 To discover an optimal policy, I setup a Q-function. The Q-function calculates the expected reward `R` for all possible actions `A` in all possible states `S`.
 
-<img src="images/Q-function.png" width="19%" align="top-left" alt="" title="Q-function" />
+<img src="assets/Q-function.png" width="19%" align="top-left" alt="" title="Q-function" />
 
 We can then define our optimal policy `π*` as the action that maximizes the Q-function for a given state across all possible states. The optimal Q-function `Q*(s,a)` maximizes the total expected reward for an agent starting in state `s` and choosing action `a`, then following the optimal policy for each subsequent state.
 
-<img src="images/optimal-policy-equation.png" width="47%" align="top-left" alt="" title="Optimal Policy Equation" />
+<img src="assets/optimal-policy-equation.png" width="47%" align="top-left" alt="" title="Optimal Policy Equation" />
 
 In order to discount returns at future time steps, the Q-function can be expanded to include the hyperparameter gamma `γ`.
 
-<img src="images/optimal-action-value-function.png" width="67%" align="top-left" alt="" title="Optimal Policy Equation" />
+<img src="assets/optimal-action-value-function.png" width="67%" align="top-left" alt="" title="Optimal Policy Equation" />
 
 
 #### Epsilon Greedy Algorithm
@@ -97,16 +97,16 @@ Furthermore, the value of epsilon is purposely decayed over time, so that the ag
 You can find this implemented as part of the `agent.act()` method [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/agent.py#L66) in `agent.py` of the source code.
 
 
-#### Deep Q-Network
+#### Deep Q-Network (DQN)
 With Deep Q-Learning, a deep neural network is used to approximate the Q-function. Given a network `F`, finding an optimal policy is a matter of finding the best weights `w` such that `F(s,a,w) ≈ Q(s,a)`.
 
-The neural network architecture used for this project can be found [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/model.py#L5) in the `model.py` file of the source code. Quite simply, the network contains three fully connected layers of 64, 64, and 4 nodes respectively.
+The neural network architecture used for this project can be found [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/model.py#L5) in the `model.py` file of the source code. The network contains three fully connected layers of 64, 64, and 4 nodes respectively. Testing of bigger networks (more nodes) and deeper networks (more layers) did not produce better results.
 
-However, rather than feeding sequential batches of experience tuples directly into our network, we will randomly sample from a history of experiences using an approach called Experience Replay.
+As for the network inputs, rather than feeding-in sequential batches of experience tuples, we will randomly sample from a history of experiences using an approach called Experience Replay.
 
 
 #### Experience Replay
-Experience replay allows an RL agent to learn from past experience.
+Experience replay allows the RL agent to learn from past experience.
 
 Each experience is stored in a replay buffer as the agent interacts with the environment. The replay buffer contains a collection of experience tuples (S, A, R, S'). The agent then samples from this buffer as part of the learning step. Experiences are sampled randomly, so that the data is uncorrelated. This prevents action values from oscillating or diverging catastrophically, since a naive Q-learning algorithm that learns from each experience tuple in sequential order can become biased by the effects of this correlation.
 
@@ -115,10 +115,12 @@ Also, experience replay improves learning through repetition. By doing multiple 
 The implementation of the replay buffer can be found [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/agent.py#L133) in the `agent.py` file of the source code.
 
 
-#### DDQN
+#### Double Deep Q-Network (DDQN)
 
 
-#### Dueling
+
+
+#### Dueling Agents
 
 
 
@@ -142,7 +144,7 @@ The complete set of results and steps taken can be found in [this notebook](Navi
 
 [Here]() is a video showing the agent's progress as it goes from randomly selecting actions to learning a policy that maximizes rewards.
 
-<img src="images/video_thumbnail.png" width="40%" align="top-left" alt="" title="Banana Agent Video" />
+<img src="assets/video_thumbnail.png" width="40%" align="top-left" alt="" title="Banana Agent Video" />
 
 
 ##### &nbsp;
