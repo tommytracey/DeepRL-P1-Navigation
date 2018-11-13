@@ -119,7 +119,7 @@ The implementation of the replay buffer can be found [here](https://github.com/t
 #### Double Deep Q-Network (DDQN)
 One issue with Deep Q-Networks is they can overestimate Q-values (see [Thrun & Schwartz, 1993](https://www.ri.cmu.edu/pub_files/pub1/thrun_sebastian_1993_1/thrun_sebastian_1993_1.pdf)). The accuracy of the Q-values depends on which actions have been tried and which states have been explored. If the agent hasn't gathered enough experiences, the Q-function will end up selecting the maximum value from a noisy set of reward estimates. This can cause the algorithm to propagate incidentally high rewards that may have been obtained by chance.
 
-<img src="assets/overestimating-Q-values.png" width="67%" align="top-left" alt="" title="Overestimating Q-values" />
+<img src="assets/overestimating-Q-values.png" width="40%" align="top-left" alt="" title="Overestimating Q-values" />
 
 We can address this issue using Double Q-Learning, where one set of parameters `w` is used to select the best action, and another set of parameters `w'` is used to evaluate that action.  
 
