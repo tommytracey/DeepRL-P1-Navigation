@@ -11,7 +11,7 @@ _Above: animation of my final trained agent_
 ##### &nbsp;
 
 ## Goal
-In this project, we build a reinforcement learning (RL) agent that navigates an environment that is similar to [Unity's Banana Collector environment](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#banana-collector).
+In this project, I build a reinforcement learning (RL) agent that navigates an environment that is similar to [Unity's Banana Collector environment](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#banana-collector).
 
 A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana. The goal of our agent is to collect as many yellow bananas as possible while avoiding blue bananas. In order to solve the environment, our agent must achieve an average score of +13 over 100 consecutive episodes.
 
@@ -40,7 +40,7 @@ The state space has 37 dimensions and contains the agent's velocity, along with 
 ##### &nbsp;
 
 ### 2. Establish Baseline
-Before building an agent that learns, we start by testing an agent that selects actions (uniformly) at random at each time step.
+Before building an agent that learns, I started by testing an agent that selects actions (uniformly) at random at each time step.
 
 ```python
 env_info = env.reset(train_mode=False)[brain_name] # reset the environment
@@ -66,17 +66,34 @@ Running this agent a few times resulted in scores from -2 to 2. Obviously, if th
 ##### &nbsp;
 
 ### 3. Implement Learning Algorithm
-At a high-level, the approach to constructing the learning algorithm is to implement a handful of different components, and then run a series of tests to determine which combination and which hyperparameters yield the best results.
+Agents use a policy to decide which actions to take within an environment. The primary objective of the learning algorithm is to find an optimal policy&mdash;i.e., a policy that maximizes the reward for the agent. Since the effects of possible actions aren't known in advance, the optimal policy must be discovered by interacting with the environment and recording observations. Therefore, the agent "learns" the policy through a process of trial-and-error that iteratively maps various environment states to the actions that yield the highest expected reward. This type of algorithm is called Q-Learning.
 
-In the following sections, we'll describe each component of the algorithm.
+As for constructing the Q-Learning algorithm, the general approach is to implement a handful of different components, then run a series of tests to determine which combination of components and which hyperparameters yield the best results.
 
-**Deep Q-Network**
+In the following sections, we'll describe each component of the algorithm in detail.
+
+#### Q-Function
+To discover an optimal policy, I setup a Q-function. The Q-function calculates the expected reward `R` for all possible actions `A` in all possible states `S`.
+
+<img src="images/Q-function.png" width="19%" align="top-left" alt="" title="Q-function" />
+
+We can then define our optimal policy `π*` as the action that maximizes the Q-function for a given state across all possible states. The optimal Q-function `Q*(s,a)` maximizes the total expected reward for an agent starting in state `s` and choosing action `a`, then following the optimal policy for each subsequent state.
+
+<img src="images/optimal-policy-equation.png" width="47%" align="top-left" alt="" title="Optimal Policy Equation" />
+
+One challenge with this approach is choosing which action to take while the agent is still learning the optimal policy. Should the agent choose an action based on the values of `Q(s,a)` observed thus far? Or, should the agent try a new action in hopes of earning a higher reward? This is known as the **exploration vs. exploitation dilemma**.
+
+To address this, I implemented an 𝛆-greedy algorithm. This algorithm allows the agent to systematically manage the exploration vs. exploitation trade-off. The agent "explores" by picking a random action with some probability epsilon `𝛜`. However, the agent continues to "exploit" its knowledge of the environment by choosing actions in accordance with the current policy with a probability of (1-𝛜).
+
+Furthermore, the value of epsilon is purposely decayed over time, so that the agent favors exploration during its initial interactions with the environment, but increasingly favors exploitation as it gains more experience. 
+
+#### Deep Q-Network
 
 
 
 
 
-**Experience Replay**
+#### Experience Replay
 
 Experience replay allows an RL agent to learn from past experience.
 
@@ -85,7 +102,7 @@ Each experience is stored in a replay buffer as the agent interacts with the env
 Also, experience replay improves learning through repetition. By doing multiple passes over the experience data, our agent has multiple opportunities to learn from individual tuples. This is particularly useful for rare interactions within the environment.
 
 
-**DDQN**
+#### DDQN
 
 
 **Dueling**
@@ -96,7 +113,7 @@ Also, experience replay improves learning through repetition. By doing multiple 
 Measure agent performance
 - Experiment summary
 
-**Hyperparameter exploration**
+- Hyperparameter exploration
 
 
 ##### &nbsp;
