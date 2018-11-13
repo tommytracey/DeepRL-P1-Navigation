@@ -66,11 +66,12 @@ Running this agent a few times resulted in scores from -2 to 2. Obviously, if th
 ##### &nbsp;
 
 ### 3. Implement Learning Algorithm
-Agents use a policy to decide which actions to take within an environment. The primary objective of the learning algorithm is to find an optimal policy&mdash;i.e., a policy that maximizes the reward for the agent. Since the effects of possible actions aren't known in advance, the optimal policy must be discovered by interacting with the environment and recording observations. Therefore, the agent "learns" the policy through a process of trial-and-error that iteratively maps various environment states to the actions that yield the highest expected reward. This type of algorithm is called Q-Learning.
+Agents use a policy to decide which actions to take within an environment. The primary objective of the learning algorithm is to find an optimal policy&mdash;i.e., a policy that maximizes the reward for the agent. Since the effects of possible actions aren't known in advance, the optimal policy must be discovered by interacting with the environment and recording observations. Therefore, the agent "learns" the policy through a process of trial-and-error that iteratively maps various environment states to the actions that yield the highest expected reward. This type of algorithm is called **Q-Learning**.
 
 As for constructing the Q-Learning algorithm, the general approach is to implement a handful of different components, then run a series of tests to determine which combination of components and which hyperparameters yield the best results.
 
 In the following sections, we'll describe each component of the algorithm in detail.
+
 
 #### Q-Function
 To discover an optimal policy, I setup a Q-function. The Q-function calculates the expected reward `R` for all possible actions `A` in all possible states `S`.
@@ -81,31 +82,46 @@ We can then define our optimal policy `π*` as the action that maximizes the Q-f
 
 <img src="images/optimal-policy-equation.png" width="47%" align="top-left" alt="" title="Optimal Policy Equation" />
 
-One challenge with this approach is choosing which action to take while the agent is still learning the optimal policy. Should the agent choose an action based on the values of `Q(s,a)` observed thus far? Or, should the agent try a new action in hopes of earning a higher reward? This is known as the **exploration vs. exploitation dilemma**.
+In order to discount returns at future time steps, the Q-function can be expanded to include the hyperparameter gamma `γ`.
 
-To address this, I implemented an 𝛆-greedy algorithm. This algorithm allows the agent to systematically manage the exploration vs. exploitation trade-off. The agent "explores" by picking a random action with some probability epsilon `𝛜`. However, the agent continues to "exploit" its knowledge of the environment by choosing actions in accordance with the current policy with a probability of (1-𝛜).
+<img src="images/optimal-action-value-function.png" width="67%" align="top-left" alt="" title="Optimal Policy Equation" />
 
-Furthermore, the value of epsilon is purposely decayed over time, so that the agent favors exploration during its initial interactions with the environment, but increasingly favors exploitation as it gains more experience. 
+
+#### Epsilon Greedy Algorithm
+One challenge with the Q-function above is choosing which action to take while the agent is still learning the optimal policy. Should the agent choose an action based on the values of `Q(s,a)` observed thus far? Or, should the agent try a new action in hopes of earning a higher reward? This is known as the **exploration vs. exploitation dilemma**.
+
+To address this, I implemented an **𝛆-greedy algorithm**. This algorithm allows the agent to systematically manage the exploration vs. exploitation trade-off. The agent "explores" by picking a random action with some probability epsilon `𝛜`. However, the agent continues to "exploit" its knowledge of the environment by choosing actions based on the policy with probability (1-𝛜).
+
+Furthermore, the value of epsilon is purposely decayed over time, so that the agent favors exploration during its initial interactions with the environment, but increasingly favors exploitation as it gains more experience. The starting and ending values for epsilon, and the rate at which it decays are three hyperparameters that are tuned through experimentation. I'll discuss this more later on.
+
+You can find this implemented as part of the `agent.act()` method [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/agent.py#L66) in `agent.py` of the source code.
+
 
 #### Deep Q-Network
+With Deep Q-Learning, a deep neural network is used to approximate the Q-function. Given a network `F`, finding an optimal policy is a matter of finding the best weights `w` such that `F(s,a,w) ≈ Q(s,a)`.
 
+The neural network architecture used for this project can be found [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/model.py#L5) in the `model.py` file of the source code. Quite simply, the network contains three fully connected layers of 64, 64, and 4 nodes respectively.
 
-
+However, rather than feeding sequential batches of experience tuples directly into our network, we will randomly sample from a history of experiences using an approach called Experience Replay.
 
 
 #### Experience Replay
-
 Experience replay allows an RL agent to learn from past experience.
 
 Each experience is stored in a replay buffer as the agent interacts with the environment. The replay buffer contains a collection of experience tuples (S, A, R, S'). The agent then samples from this buffer as part of the learning step. Experiences are sampled randomly, so that the data is uncorrelated. This prevents action values from oscillating or diverging catastrophically, since a naive Q-learning algorithm that learns from each experience tuple in sequential order can become biased by the effects of this correlation.
 
 Also, experience replay improves learning through repetition. By doing multiple passes over the experience data, our agent has multiple opportunities to learn from individual tuples. This is particularly useful for rare interactions within the environment.
 
+The implementation of the replay buffer can be found [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/agent.py#L133) in the `agent.py` file of the source code.
+
 
 #### DDQN
 
 
-**Dueling**
+#### Dueling
+
+
+
 
 ##### &nbsp;
 
