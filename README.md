@@ -119,18 +119,23 @@ The implementation of the replay buffer can be found [here](https://github.com/t
 #### Double Deep Q-Network (DDQN)
 One issue with Deep Q-Networks is they can overestimate Q-values (see [Thrun & Schwartz, 1993](https://www.ri.cmu.edu/pub_files/pub1/thrun_sebastian_1993_1/thrun_sebastian_1993_1.pdf)). The accuracy of the Q-values depends on which actions have been tried and which states have been explored. If the agent hasn't gathered enough experiences, the Q-function will end up selecting the maximum value from a noisy set of reward estimates. This can cause the algorithm to propagate incidentally high rewards that may have been obtained by chance.
 
-<img src="assets/overestimating-Q-values.png" width="40%" align="top-left" alt="" title="Overestimating Q-values" />
+<img src="assets/overestimating-Q-values.png" width="50%" align="top-left" alt="" title="Overestimating Q-values" />
 
 We can address this issue using Double Q-Learning, where one set of parameters `w` is used to select the best action, and another set of parameters `w'` is used to evaluate that action.  
 
-<img src="assets/DDQN-slide.png" width="50%" align="top-left" alt="" title="Overestimating Q-values" />
+<img src="assets/DDQN-slide.png" width="40%" align="top-left" alt="" title="DDQN" />
 
 The DDQN implementation can be found [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/agent.py#L96) in the `agent.py` file of the source code.
 
 
 #### Dueling Agents
+Dueling networks utilize two streams: one that estimates the state value function `V(s)`, and another that estimates the advantage for each action `A(s,a)`. These two values are then combined to obtain the desired Q-values.  
 
+The reasoning behind this approach is that state values don't change that much across actions, so it makes sense to estimate them directly. However, we still want to measure the impact that individual actions make in each state, hence the need for the advantage function. 
 
+The dueling agents are implemented within the fully connected layers [here](https://github.com/tommytracey/DeepRL-P1-Navigation/blob/master/model.py#L21) in the `model.py` file of the source code.
+
+<img src="assets/dueling-networks-slide.png" width="60%" align="top-left" alt="" title="DDQN" />
 
 
 ##### &nbsp;
