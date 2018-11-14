@@ -1,7 +1,7 @@
 #### Udacity Deep Reinforcement Learning Nanodegree
 ### Project 1: Navigation
 # Train an RL Agent to Collect Bananas
-:banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana:
+:banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana::banana:
 
 
 <img src="assets/banana_agent.gif" width="60%" align="top-left" alt="" title="Banana Agent" />
