@@ -109,7 +109,7 @@ As for the network inputs, rather than feeding-in sequential batches of experien
 #### Experience Replay
 Experience replay allows the RL agent to learn from past experience.
 
-Each experience is stored in a replay buffer as the agent interacts with the environment. The replay buffer contains a collection of experience tuples (S, A, R, S'). The agent then samples from this buffer as part of the learning step. Experiences are sampled randomly, so that the data is uncorrelated. This prevents action values from oscillating or diverging catastrophically, since a naive Q-learning algorithm that learns from each experience tuple in sequential order can become biased by the effects of this correlation.
+Each experience is stored in a replay buffer as the agent interacts with the environment. The replay buffer contains a collection of experience tuples `(S, A, R, S')`. The agent then samples from this buffer as part of the learning step. Experiences are sampled randomly, so that the data is uncorrelated. This prevents action values from oscillating or diverging catastrophically, since a naive Q-learning algorithm that learns from each experience tuple in sequential order can become biased by the effects of this correlation.
 
 Also, experience replay improves learning through repetition. By doing multiple passes over the experience data, our agent has multiple opportunities to learn from individual tuples. This is particularly useful for rare interactions within the environment.
 
@@ -145,7 +145,7 @@ Now that the various components of our algorithm are in place, it's time to meas
 
 The table below shows the complete set of experiments. These experiments compare different combinations of the components and hyperparameters discussed above. However, note that all agents utilized a replay buffer.
 
-<img src="assets/experiment_summary.png" width="70%" align="top-left" alt="" title="Experiment Summary" />
+<img src="assets/experiment_summary.png" width="80%" align="top-left" alt="" title="Experiment Summary" />
 
 
 ##### &nbsp;
@@ -153,20 +153,21 @@ The table below shows the complete set of experiments. These experiments compare
 ### 5. Select best performing agent
 The best performing agents were able to solve the environment in 200-250 episodes. While this set of agents included ones that utilized Double DQN and Dueling DQN, ultimately, the top performing agent was a simple DQN with replay buffer.
 
-<img src="assets/best-agent-graph.png" width="50%" align="top-left" alt="" title="Experiment Summary" />
+<img src="assets/best-agent-graph.png" width="50%" align="top-left" alt="" title="Best Agent Graph" />
 
 The complete set of results and steps taken can be found in [this notebook](Navigation_final.ipynb).
 
-Also, [here]() is a video showing the agent's progress as it goes from randomly selecting actions to learning a policy that maximizes rewards.
+Also, [here](https://youtu.be/NZd1PoeBoro) is a video showing the agent's progress as it goes from randomly selecting actions to learning a policy that maximizes rewards.
 
-<img src="assets/video_thumbnail.png" width="40%" align="top-left" alt="" title="Banana Agent Video" />
+<a href="https://youtu.be/NZd1PoeBoro"><img src="assets/video-thumbnail.png" width="40%" align="top-left" alt="" title="Banana Agent Video" /></a>
+
 
 
 ##### &nbsp;
 
 ## Future Improvements
-- **Test the replay buffer** &mdash; Implement a way to enable/disable replay buffer. As mentioned before, all agents utilized the replay buffer. Therefore, the test results don't measure the impact the replay buffer had on performance.
-- **Add *prioritized* experience replay** &mdash; Rather than selecting experience tuples randomly, prioritized replay selects experiences based on a priority value that is correlated with the magnitude of error. This can improve learning by increasing the probability that rare and important experience vectors are sampled. 
+- **Test the replay buffer** &mdash; Implement a way to enable/disable the replay buffer. As mentioned before, all agents utilized the replay buffer. Therefore, the test results don't measure the impact the replay buffer has on performance.
+- **Add *prioritized* experience replay** &mdash; Rather than selecting experience tuples randomly, prioritized replay selects experiences based on a priority value that is correlated with the magnitude of error. This can improve learning by increasing the probability that rare and important experience vectors are sampled.
 - **Replace conventional exploration heuristics with Noisy DQN** &mdash; This approach is explained [here](https://arxiv.org/abs/1706.10295) in this research paper. The key takeaway is that parametric noise is added to the weights to induce stochasticity to the agent's policy, yielding more efficient exploration.
 
 ##### &nbsp;
